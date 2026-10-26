@@ -1,2 +1,6 @@
-# tensor-engine-144-ryan-vo
-Ryan Vo | OpenShell is the safe, private runtime for autonomous AI agents.
+# tensor-engine-144-ryan-vo — Ryan Vo
+
+> Work in progress. This checkpoint may be incomplete or fail tests. See PLAN.md and STATUS.md before use.
+
+
+Maintainer: Ryan Vo <ryandtvo@gmail.com>

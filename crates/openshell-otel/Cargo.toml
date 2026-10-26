@@ -1,0 +1,17 @@
+[package]
+name = "openshell-otel"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+authors = { workspace = true }
+repository = { workspace = true }
+description = "OpenShell OpenTelemetry trace context extraction"
+
+[dependencies]
+openshell-ocsf = { path = "../openshell-ocsf" }
+opentelemetry = { workspace = true }
+tracing-opentelemetry = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+opentelemetry-sdk = { workspace = true }

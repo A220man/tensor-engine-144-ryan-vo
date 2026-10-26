@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "current_feature": "otel-trace-extraction",
+  "features": [
+    {
+      "id": "ocsf-trace-correlation",
+      "title": "OCSF Trace Correlation (openshell-ocsf crate)",
+      "status": "done",
+      "acceptance": [
+        "Trace correlation type (TraceContext) with trace.uid field",
+        "Builder setter .trace_context() to add trace object and profile",
+        "trace serialization in OCSF events",
+        "metadata.profiles includes 'trace' when trace context present",
+        "Vendored Trace profile schema for OCSF 1.8",
+        "Emission hook for automatic trace context injection",
+        "Downgrade stripping for OCSF 1.3/1.1"
+      ],
+      "implementation": [
+        "crates/openshell-ocsf/src/trace.rs",
+        "crates/openshell-ocsf/src/builders/mod.rs",
+        "crates/openshell-ocsf/src/emit.rs",
+        "crates/openshell-ocsf/src/schema/trace_profile.json"
+      ],
+      "tests": [
+        "crates/openshell-ocsf/tests/trace_correlation.rs"
+      ]
+    },
+    {
+      "id": "otel-trace-extraction",
+      "title": "OTel Sampled Trace Context Extraction (openshell-otel crate)",
+      "status": "in_progress",
+      "acceptance": [
+        "Function to extract active OTel context",
+        "Returns trace context only when span is valid and sampled",
+        "No OTel dependency in openshell-ocsf"
+      ],
+      "implementation": [
+        "crates/openshell-otel/src/trace.rs"
+      ],
+      "tests": [
+        "crates/openshell-otel/tests/trace_extraction.rs"
+      ]
+    },
+    {
+      "id": "deny-spans",
+      "title": "INFO-level Deny Spans (openshell-supervisor-network)",
+      "status": "planned",
+      "acceptance": [
+        "INFO-level span for deny decisions",
+        "Span entered around OCSF emission at deny sites",
+        "Carries decision attributes (policy, reason, destination)"
+      ],
+      "implementation": [
+        "crates/openshell-supervisor-network/src/deny.rs"
+      ],
+      "tests": [
+        "crates/openshell-supervisor-network/tests/deny_spans.rs"
+      ]
+    },
+    {
+      "id": "binary-integration",
+      "title": "Supervisor/Gateway Binary Integration",
+      "status": "planned",
+      "acceptance": [
+        "Binaries register OTel extractor at startup",
+        "OCSF emission hook fills trace context automatically"
+      ],
+      "implementation": [
+        "crates/openshell-supervisor/src/main.rs",
+        "crates/openshell-gateway/src/main.rs"
+      ],
+      "tests": []
+    }
+  ]
+}
