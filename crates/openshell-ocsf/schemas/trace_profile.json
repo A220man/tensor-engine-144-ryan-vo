@@ -1,0 +1,56 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OCSF Trace Profile",
+  "type": "object",
+  "description": "The Trace profile adds trace correlation fields to OCSF events per the OCSF 1.8 specification.",
+  "properties": {
+    "trace": {
+      "type": "object",
+      "description": "The trace object carries the W3C trace context.",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$",
+          "description": "The W3C trace ID (32 lowercase hex characters)."
+        },
+        "span": {
+          "type": "object",
+          "description": "The span object (optional, not populated in this version).",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{16}$",
+              "description": "The W3C span ID (16 lowercase hex characters)."
+            },
+            "start_time": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The span start time in RFC3339 format."
+            },
+            "end_time": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The span end time in RFC3339 format."
+            }
+          },
+          "required": ["id", "start_time", "end_time"]
+        }
+      },
+      "required": ["uid"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "profiles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["trace"]
+          },
+          "description": "List of OCSF profiles this event conforms to."
+        }
+      }
+    }
+  }
+}
