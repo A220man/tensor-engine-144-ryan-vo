@@ -28,7 +28,7 @@
     {
       "id": "otel-trace-extraction",
       "title": "OTel Sampled Trace Context Extraction (openshell-otel crate)",
-      "status": "in_progress",
+      "status": "done",
       "acceptance": [
         "Function to extract active OTel context",
         "Returns trace context only when span is valid and sampled",

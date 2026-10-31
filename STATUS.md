@@ -2,11 +2,11 @@
 
 Work in progress; not a release-readiness or successful QA claim.
 
-Version: 1.0.0
+Version: 1.1.0
 
 ## Outstanding findings
 
-Oversized snapshot file: target/debug/deps/libtime-270de76e8690415d.rmeta
+No completed independent review for this checkpoint.
 
 ## Next round
 

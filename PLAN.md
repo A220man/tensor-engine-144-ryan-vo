@@ -27,7 +27,7 @@ Tests: `crates/openshell-ocsf/tests/trace_correlation.rs`
 
 ### otel-trace-extraction — OTel Sampled Trace Context Extraction (openshell-otel crate)
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - Function to extract active OTel context
