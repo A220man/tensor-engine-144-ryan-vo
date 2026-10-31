@@ -6,8 +6,7 @@
 //! and sampled.
 
 use openshell_ocsf::trace::{TraceContext, TraceExtractor};
-use opentelemetry::trace::{SpanContext, TraceFlags, TraceState};
-use opentelemetry::Context;
+use opentelemetry::trace::TraceContextExt;
 use std::fmt;
 use tracing::Span;
 use tracing_opentelemetry::OpenTelemetrySpanExt;
@@ -36,7 +35,7 @@ pub enum TraceExtractionError {
 ///
 /// This ensures that only trace IDs that can be resolved in a trace backend
 /// (e.g., Jaeger, Tempo) are included in OCSF events.
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct OtelTraceExtractor;
 
 impl OtelTraceExtractor {
@@ -51,8 +50,10 @@ impl TraceExtractor for OtelTraceExtractor {
         // Get the current tracing span
         let span = Span::current();
 
-        // Extract the OpenTelemetry span context
-        let otel_context = span.context().span().span_context();
+        // Extract the OpenTelemetry span context using the extension trait
+        let otel_cx = span.context();
+        let span_ref = otel_cx.span();
+        let otel_context = span_ref.span_context();
 
         // Check if the span context is valid
         if !otel_context.is_valid() {
@@ -60,13 +61,13 @@ impl TraceExtractor for OtelTraceExtractor {
         }
 
         // Check if the span is sampled
-        if !otel_context.trace_flags().contains(TraceFlags::SAMPLED) {
+        if !otel_context.trace_flags().is_sampled() {
             return None;
         }
 
         // Extract the W3C trace ID (32 lowercase hex characters)
         let trace_id = otel_context.trace_id();
-        let trace_id_hex = trace_id.to_hex();
+        let trace_id_hex = format!("{:032x}", trace_id);
 
         // Validate the trace ID format (32 lowercase hex chars)
         if trace_id_hex.len() != 32 || !trace_id_hex.chars().all(|c| matches!(c, '0'..='9' | 'a'..='f')) {
@@ -106,13 +107,6 @@ pub fn register_global_trace_extractor() -> Result<(), Box<dyn std::error::Error
 #[cfg(test)]
 mod tests {
     use super::*;
-    use opentelemetry::trace::{SpanContext, TraceFlags, TraceId, TraceState};
-    use opentelemetry::Context;
-    use opentelemetry_sdk::trace::SdkTracerProvider;
-    use tracing::subscriber::set_global_default;
-    use tracing_opentelemetry::OpenTelemetryLayer;
-    use tracing_subscriber::layer::SubscriberExt;
-    use tracing_subscriber::util::SubscriberInitExt;
 
     #[test]
     fn test_otel_trace_extractor_default() {

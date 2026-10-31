@@ -10,8 +10,10 @@ description = "OpenShell OpenTelemetry trace context extraction"
 [dependencies]
 openshell-ocsf = { path = "../openshell-ocsf" }
 opentelemetry = { workspace = true }
+tracing = { workspace = true }
 tracing-opentelemetry = { workspace = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
-opentelemetry-sdk = { workspace = true }
+opentelemetry_sdk = { workspace = true }
+tracing-subscriber = "0.3"
