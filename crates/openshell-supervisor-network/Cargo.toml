@@ -1,0 +1,17 @@
+[package]
+name = "openshell-supervisor-network"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+authors = { workspace = true }
+repository = { workspace = true }
+description = "OpenShell supervisor network deny spans"
+
+[dependencies]
+openshell-ocsf = { path = "../openshell-ocsf" }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+openshell-ocsf = { path = "../openshell-ocsf" }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "crates/openshell-ocsf",
     "crates/openshell-otel",
+    "crates/openshell-supervisor-network",
 ]
 
 [workspace.package]
