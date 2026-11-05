@@ -108,6 +108,13 @@ fn test_explicit_trace_overrides_global_extractor() {
 
 #[test]
 fn test_downgrade_v1_3_strips_trace() {
+    struct VersionGuard;
+    impl Drop for VersionGuard {
+        fn drop(&mut self) {
+            set_ocsf_version(OcsfVersion::V1_8);
+        }
+    }
+    let _guard = VersionGuard;
     set_ocsf_version(OcsfVersion::V1_3);
     let trace = TraceContext::new("0af7651916cd43dd8448eb211c80319c");
     ocsf_emit!(BaseEventBuilder::new(4001, 1)
@@ -116,11 +123,17 @@ fn test_downgrade_v1_3_strips_trace() {
     let event = take_last_event().expect("event emitted");
     assert!(event.get("trace").is_none(), "trace object should be stripped for v1.3");
     assert!(!event["metadata"]["profiles"].as_array().unwrap().iter().any(|v| v == "trace"));
-    set_ocsf_version(OcsfVersion::V1_8);
 }
 
 #[test]
 fn test_downgrade_v1_1_strips_trace() {
+    struct VersionGuard;
+    impl Drop for VersionGuard {
+        fn drop(&mut self) {
+            set_ocsf_version(OcsfVersion::V1_8);
+        }
+    }
+    let _guard = VersionGuard;
     set_ocsf_version(OcsfVersion::V1_1);
     let trace = TraceContext::new("0af7651916cd43dd8448eb211c80319c");
     ocsf_emit!(BaseEventBuilder::new(4001, 1)
@@ -129,7 +142,6 @@ fn test_downgrade_v1_1_strips_trace() {
     let event = take_last_event().expect("event emitted");
     assert!(event.get("trace").is_none(), "trace object should be stripped for v1.1");
     assert!(!event["metadata"]["profiles"].as_array().unwrap().iter().any(|v| v == "trace"));
-    set_ocsf_version(OcsfVersion::V1_8);
 }
 
 #[test]

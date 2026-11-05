@@ -1,7 +1,7 @@
 //! Tests for OpenTelemetry trace context extraction.
 
 use openshell_otel::{OtelTraceExtractor, register_global_trace_extractor};
-use openshell_ocsf::trace::{TraceContext, TraceExtractor, set_global_trace_extractor};
+use openshell_ocsf::trace::{TraceContext, TraceExtractor};
 
 #[test]
 fn test_otel_trace_extractor_no_span() {

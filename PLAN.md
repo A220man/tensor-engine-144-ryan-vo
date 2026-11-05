@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-otel-trace-extraction
+deny-spans
 
 ## Roadmap
 
@@ -40,14 +40,14 @@ Tests: `crates/openshell-otel/tests/trace_extraction.rs`
 
 ### deny-spans — INFO-level Deny Spans (openshell-supervisor-network)
 
-Status: planned
+Status: done
 
 Acceptance:
 - INFO-level span for deny decisions
 - Span entered around OCSF emission at deny sites
 - Carries decision attributes (policy, reason, destination)
 
-Implementation: `crates/openshell-supervisor-network/src/deny.rs`
+Implementation: `crates/openshell-supervisor-network/src/lib.rs`
 
 Tests: `crates/openshell-supervisor-network/tests/deny_spans.rs`
 

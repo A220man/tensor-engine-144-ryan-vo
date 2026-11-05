@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "otel-trace-extraction",
+  "current_feature": "deny-spans",
   "features": [
     {
       "id": "ocsf-trace-correlation",
@@ -44,14 +44,14 @@
     {
       "id": "deny-spans",
       "title": "INFO-level Deny Spans (openshell-supervisor-network)",
-      "status": "planned",
+      "status": "done",
       "acceptance": [
         "INFO-level span for deny decisions",
         "Span entered around OCSF emission at deny sites",
         "Carries decision attributes (policy, reason, destination)"
       ],
       "implementation": [
-        "crates/openshell-supervisor-network/src/deny.rs"
+        "crates/openshell-supervisor-network/src/lib.rs"
       ],
       "tests": [
         "crates/openshell-supervisor-network/tests/deny_spans.rs"
