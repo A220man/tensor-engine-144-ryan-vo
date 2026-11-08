@@ -4,6 +4,8 @@ members = [
     "crates/openshell-ocsf",
     "crates/openshell-otel",
     "crates/openshell-supervisor-network",
+    "crates/openshell-supervisor",
+    "crates/openshell-gateway",
 ]
 
 [workspace.package]

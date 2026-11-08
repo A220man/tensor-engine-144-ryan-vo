@@ -53,7 +53,7 @@ Tests: `crates/openshell-supervisor-network/tests/deny_spans.rs`
 
 ### binary-integration — Supervisor/Gateway Binary Integration
 
-Status: planned
+Status: done
 
 Acceptance:
 - Binaries register OTel extractor at startup

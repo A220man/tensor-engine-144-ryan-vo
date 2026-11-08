@@ -1,4 +1,3 @@
-
 //! Tests for OCSF trace correlation feature.
 
 use openshell_ocsf::builders::BaseEventBuilder;
@@ -108,6 +107,8 @@ fn test_explicit_trace_overrides_global_extractor() {
 
 #[test]
 fn test_downgrade_v1_3_strips_trace() {
+    // Reset version at start to avoid parallel test interference
+    set_ocsf_version(OcsfVersion::V1_8);
     struct VersionGuard;
     impl Drop for VersionGuard {
         fn drop(&mut self) {
@@ -127,6 +128,8 @@ fn test_downgrade_v1_3_strips_trace() {
 
 #[test]
 fn test_downgrade_v1_1_strips_trace() {
+    // Reset version at start to avoid parallel test interference
+    set_ocsf_version(OcsfVersion::V1_8);
     struct VersionGuard;
     impl Drop for VersionGuard {
         fn drop(&mut self) {
@@ -193,4 +196,3 @@ fn test_schema_validation_without_trace() {
     let profiles = event["metadata"]["profiles"].as_array().unwrap();
     assert!(!profiles.iter().any(|v| v == "trace"));
 }
-
