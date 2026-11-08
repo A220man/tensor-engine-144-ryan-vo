@@ -1,6 +1,6 @@
 //! OCSF event emission with automatic trace context injection.
 
-use crate::trace::OcsfVersion;
+pub use crate::trace::OcsfVersion;
 use parking_lot::RwLock;
 use serde_json::Value;
 use tracing::info;

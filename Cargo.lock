@@ -870,6 +870,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 
 [[package]]
+name = "openshell-gateway"
+version = "0.1.0"
+dependencies = [
+ "openshell-ocsf",
+ "openshell-otel",
+ "opentelemetry",
+ "opentelemetry_sdk",
+ "thiserror",
+ "tracing",
+ "tracing-opentelemetry",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "openshell-ocsf"
 version = "0.1.0"
 dependencies = [
@@ -888,6 +902,21 @@ name = "openshell-otel"
 version = "0.1.0"
 dependencies = [
  "openshell-ocsf",
+ "opentelemetry",
+ "opentelemetry_sdk",
+ "thiserror",
+ "tracing",
+ "tracing-opentelemetry",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "openshell-supervisor"
+version = "0.1.0"
+dependencies = [
+ "openshell-ocsf",
+ "openshell-otel",
+ "openshell-supervisor-network",
  "opentelemetry",
  "opentelemetry_sdk",
  "thiserror",

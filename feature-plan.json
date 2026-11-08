@@ -60,7 +60,7 @@
     {
       "id": "binary-integration",
       "title": "Supervisor/Gateway Binary Integration",
-      "status": "planned",
+      "status": "done",
       "acceptance": [
         "Binaries register OTel extractor at startup",
         "OCSF emission hook fills trace context automatically"

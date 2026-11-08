@@ -1,0 +1,23 @@
+[package]
+name = "openshell-supervisor"
+version = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+authors = { workspace = true }
+repository = { workspace = true }
+description = "OpenShell supervisor binary"
+
+[[bin]]
+name = "openshell-supervisor"
+path = "src/main.rs"
+
+[dependencies]
+openshell-ocsf = { path = "../openshell-ocsf" }
+openshell-otel = { path = "../openshell-otel" }
+openshell-supervisor-network = { path = "../openshell-supervisor-network" }
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+opentelemetry = { workspace = true }
+opentelemetry_sdk = { workspace = true }
+tracing-opentelemetry = { workspace = true }
+thiserror = { workspace = true }
