@@ -56,16 +56,17 @@ macro_rules! ocsf_emit {
 }
 
 /// Internal function to emit the event JSON.
-fn emit_event(event: Value) {
+pub fn emit_event(event: Value) {
     // In production, this emits via tracing::info! with a structured field
     // For testing, we store in a thread-local
     info!(target: "ocsf", event = %event, "OCSF event");
 }
 
-/// Thread-local storage for the last emitted event (for testing).
 thread_local! {
-    static LAST_EVENT: std::cell::RefCell<Option<Value>> = std::cell::RefCell::new(None);
+    static LAST_EVENT: std::cell::RefCell<Option<Value>> = const { std::cell::RefCell::new(None) };
 }
+
+
 
 /// Gets the last emitted event (for testing).
 pub fn take_last_event() -> Option<Value> {
