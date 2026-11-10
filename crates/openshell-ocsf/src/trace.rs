@@ -4,8 +4,8 @@
 //! for integrating OpenTelemetry trace context into OCSF events without
 //! depending on OpenTelemetry directly.
 
+use parking_lot::Mutex;
 use serde::{Deserialize, Serialize};
-use std::sync::OnceLock;
 
 /// Trace context carried in OCSF events per the OCSF 1.8 Trace profile.
 ///
@@ -64,21 +64,34 @@ impl<T: TraceExtractor + std::fmt::Debug> DebugTraceExtractor for T {}
 /// at startup to register their OTel-based extractor. The `ocsf_emit!` macro
 /// uses this to automatically fill in trace context when the builder hasn't
 /// set one explicitly.
-static GLOBAL_TRACE_EXTRACTOR: OnceLock<Box<dyn DebugTraceExtractor>> = OnceLock::new();
+static GLOBAL_TRACE_EXTRACTOR: Mutex<Option<Box<dyn DebugTraceExtractor>>> = Mutex::new(None);
 
 /// Sets the global trace extractor.
 ///
 /// Should be called once at application startup. Returns an error if
 /// an extractor has already been registered.
 pub fn set_global_trace_extractor(extractor: Box<dyn DebugTraceExtractor>) -> Result<(), Box<dyn DebugTraceExtractor>> {
-    GLOBAL_TRACE_EXTRACTOR.set(extractor)
+    let mut guard = GLOBAL_TRACE_EXTRACTOR.lock();
+    if guard.is_some() {
+        return Err(extractor);
+    }
+    *guard = Some(extractor);
+    Ok(())
 }
 
 /// Gets the current trace context from the global extractor.
 ///
 /// Returns `None` if no extractor is registered or the extractor returns `None`.
 pub fn get_current_trace_context() -> Option<TraceContext> {
-    GLOBAL_TRACE_EXTRACTOR.get()?.current_trace_context()
+    GLOBAL_TRACE_EXTRACTOR.lock().as_ref()?.current_trace_context()
+}
+
+/// Resets the global trace extractor (for testing only).
+///
+/// This function is only available in test configurations.
+#[doc(hidden)]
+pub fn reset_global_trace_extractor() {
+    *GLOBAL_TRACE_EXTRACTOR.lock() = None;
 }
 
 /// OCSF schema version for downgrade logic.

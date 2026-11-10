@@ -1,7 +1,7 @@
 //! Tests for OCSF trace correlation feature.
 
 use openshell_ocsf::builders::BaseEventBuilder;
-use openshell_ocsf::trace::{TraceContext, OcsfVersion, set_global_trace_extractor};
+use openshell_ocsf::trace::{TraceContext, OcsfVersion, set_global_trace_extractor, reset_global_trace_extractor};
 use openshell_ocsf::{ocsf_emit, emit::{set_ocsf_version, take_last_event}};
 
 /// Mock trace extractor for testing.
@@ -67,6 +67,9 @@ fn test_ocsf_emit_explicit_trace() {
 
 #[test]
 fn test_ocsf_emit_automatic_trace_from_extractor() {
+    // Reset global extractor first
+    reset_global_trace_extractor();
+    
     // Register mock extractor
     let extractor = Box::new(MockTraceExtractor {
         trace_id: Some("0af7651916cd43dd8448eb211c80319c".to_string()),
@@ -79,30 +82,40 @@ fn test_ocsf_emit_automatic_trace_from_extractor() {
     assert_eq!(event["trace"]["uid"], "0af7651916cd43dd8448eb211c80319c");
     assert!(event["metadata"]["profiles"].as_array().unwrap().iter().any(|v| v == "trace"));
 
-    // Clean up - can't reset OnceLock, so this test runs last or we accept the state
+    // Clean up - reset global extractor for other tests
+    reset_global_trace_extractor();
 }
 
 #[test]
-fn test_ocsf_emit_no_trace_when_extractor_returns_none() {
-    // The global extractor is already set from previous test, but returns None for new extractor
-    // We can't reset OnceLock, so we test the explicit override behavior instead
-    let trace = TraceContext::new("11111111111111111111111111111111");
-    ocsf_emit!(BaseEventBuilder::new(4001, 1)
-        .metadata(&["network_proxy"])
-        .trace_context(trace));
+fn test_ocsf_emit_no_trace_when_no_extractor() {
+    // Ensure no global extractor is set
+    reset_global_trace_extractor();
+    
+    // Emit without explicit trace context and no global extractor
+    ocsf_emit!(BaseEventBuilder::new(4001, 1).metadata(&["network_proxy"]));
     let event = take_last_event().expect("event emitted");
-    // Explicit trace context should override global extractor
-    assert_eq!(event["trace"]["uid"], "11111111111111111111111111111111");
+    assert!(event.get("trace").is_none(), "trace should be absent when no extractor");
+    assert!(!event["metadata"]["profiles"].as_array().unwrap().iter().any(|v| v == "trace"));
 }
 
 #[test]
 fn test_explicit_trace_overrides_global_extractor() {
+    // Reset and set a global extractor
+    reset_global_trace_extractor();
+    let extractor = Box::new(MockTraceExtractor {
+        trace_id: Some("global_trace_id".to_string()),
+    });
+    set_global_trace_extractor(extractor).expect("extractor set");
+
+    // Emit with explicit trace context - should override global extractor
     let trace = TraceContext::new("22222222222222222222222222222222");
     ocsf_emit!(BaseEventBuilder::new(4001, 1)
         .metadata(&["network_proxy"])
         .trace_context(trace));
     let event = take_last_event().expect("event emitted");
     assert_eq!(event["trace"]["uid"], "22222222222222222222222222222222");
+    
+    reset_global_trace_extractor();
 }
 
 #[test]

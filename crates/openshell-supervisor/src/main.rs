@@ -43,7 +43,7 @@ fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // emitted within traced spans will automatically include trace context.
 
     // Example: emit an OCSF event with automatic trace context
-    let _ = openshell_ocsf::ocsf_emit!(
+    openshell_ocsf::ocsf_emit!(
         openshell_ocsf::builders::BaseEventBuilder::new(4001, 1)
             .metadata(&["network_proxy", "container"])
     );
