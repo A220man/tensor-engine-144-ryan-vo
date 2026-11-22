@@ -2,7 +2,6 @@
 //!
 //! Registers the OpenTelemetry trace extractor for automatic OCSF trace correlation.
 
-use openshell_ocsf::emit::{set_ocsf_version, OcsfVersion};
 use openshell_otel::register_global_trace_extractor;
 use opentelemetry::trace::TracerProvider as _;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -27,8 +26,6 @@ fn init_tracing() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Register the global trace extractor for OCSF events
     register_global_trace_extractor()?;
 
-    // Set OCSF version (defaults to 1.8)
-    set_ocsf_version(OcsfVersion::V1_8);
 
     Ok(())
 }
