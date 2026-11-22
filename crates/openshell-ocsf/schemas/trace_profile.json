@@ -46,7 +46,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["trace"]
+            "minLength": 1
           },
           "description": "List of OCSF profiles this event conforms to."
         }

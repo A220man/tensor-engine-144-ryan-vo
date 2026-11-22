@@ -148,3 +148,24 @@ impl TraceContextBuilder for BaseEventBuilder {
         self.trace_context(trace)
     }
 }
+
+/// Builder support for trace correlation with an explicit target OCSF version.
+///
+/// An explicit `.trace_context()` call overrides any automatic value supplied by
+/// the emission hook, and is preserved for OCSF versions that support the Trace
+/// profile (1.4+). Targeting 1.1/1.3 yields the same event with the `trace`
+/// object and the `trace` profile removed.
+pub trait TraceContextForVersion {
+    /// Sets the trace context and builds the event for `version`.
+    fn trace_context_for_version(
+        self,
+        trace: TraceContext,
+        version: OcsfVersion,
+    ) -> serde_json::Value;
+}
+
+impl TraceContextForVersion for BaseEventBuilder {
+    fn trace_context_for_version(self, trace: TraceContext, version: OcsfVersion) -> serde_json::Value {
+        self.trace_context(trace).build_for_version(version)
+    }
+}
