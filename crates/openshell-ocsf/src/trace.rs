@@ -110,4 +110,9 @@ impl OcsfVersion {
     pub fn supports_trace_profile(self) -> bool {
         matches!(self, OcsfVersion::V1_8)
     }
+
+/// Test trace ID constant used in unit tests.
+/// This is a 32-character lowercase hex string suitable for OCSF Trace profile uid.
+pub const TEST_TRACE_ID: &str = "a1b2c3d4e5f60718293a4b5c6d7e8f9a";
+
 }
